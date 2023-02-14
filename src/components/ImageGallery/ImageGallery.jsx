@@ -8,6 +8,7 @@ import { LoadMoreButton } from '../Button/Button';
 import { fetchImages } from '../api';
 
 export function ImageGallery({ imageQuery }) {
+  const [query, setQuery] = useState('')
   const [imagesData, setImagesData] = useState(null);
   const [page, setPage] = useState(1);
   const [error, setError] = useState(null);
@@ -23,6 +24,7 @@ export function ImageGallery({ imageQuery }) {
 
     fetchImages(imageQuery, 1)
       .then(data => {
+        setQuery(imageQuery);
         setIsLoad(false);
         setImagesData(data.hits);
         setStatus('resolved');
@@ -35,7 +37,7 @@ export function ImageGallery({ imageQuery }) {
     if (page !== 1) {
       // this.setState({ isLoad: true,status:Status.PENDING});
       setIsLoad(true);
-      fetchImages(imageQuery, page)
+      fetchImages(query, page)
         .then(data => {
           setImagesData(pS => [...pS, ...data.hits]);
           setStatus('resolved');
@@ -43,7 +45,7 @@ export function ImageGallery({ imageQuery }) {
         })
         .catch(error => setError({ error }));
     }
-  }, [page]);
+  }, [page,query]);
 
   const handleClickImg = url => {
     setBigImg(url);
