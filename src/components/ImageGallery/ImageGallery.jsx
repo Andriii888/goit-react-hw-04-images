@@ -18,10 +18,10 @@ export function ImageGallery({ imageQuery }) {
   const [isLoad, setIsLoad] = useState(false);
 
   useEffect(() => {
+    if(imageQuery===''){return}
     setImagesData(null);
     setIsLoad(true);
     setStatus('pending');
-
     fetchImages(imageQuery, 1)
       .then(data => {
         setQuery(imageQuery);
@@ -75,7 +75,7 @@ export function ImageGallery({ imageQuery }) {
         <ImageGalleryStyle className="gallery">
           <ImageGalleryItem data={imagesData} imgUrl={handleClickImg} />
         </ImageGalleryStyle>
-        <LoadMoreButton onClick={clickLoadMore} page={page} />
+        {!isLoad && <LoadMoreButton onClick={clickLoadMore} page={page} />}
         {isLoad && <Loader />}
         {/* <Loader /> */}
         {openModal && <Modal url={bigImg} onClose={toggleOpenModal} />}
